@@ -1,775 +1,587 @@
 <!DOCTYPE html>
 <html lang="ku" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="theme-color" content="#090909">
-
-<title>ShahanFX | کاتژمێری هەواڵی Forex</title>
-
-<style>
-:root{
-  --bg:#070707;
-  --panel:#101010;
-  --panel2:#151515;
-  --gold:#d7a928;
-  --gold2:#f5d76e;
-  --text:#f5f5f5;
-  --muted:#999;
-  --line:#292929;
-  --green:#28d17c;
-  --orange:#ff9f43;
-  --red:#ff4d5e;
-  --blue:#4da3ff;
-}
-
-*{
-  box-sizing:border-box;
-  margin:0;
-  padding:0;
-}
-
-body{
-  background:
-    radial-gradient(circle at top,#1a1508 0,#070707 38%,#050505 100%);
-  color:var(--text);
-  font-family:
-    Tahoma,
-    Arial,
-    sans-serif;
-  min-height:100vh;
-}
-
-button,
-input,
-select{
-  font-family:inherit;
-}
-
-.container{
-  width:min(1200px,94%);
-  margin:auto;
-}
-
-/* HEADER */
-
-header{
-  position:sticky;
-  top:0;
-  z-index:100;
-  backdrop-filter:blur(18px);
-  background:rgba(7,7,7,.88);
-  border-bottom:1px solid rgba(215,169,40,.18);
-}
-
-.nav{
-  min-height:74px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:20px;
-}
-
-.brand{
-  display:flex;
-  align-items:center;
-  gap:12px;
-}
-
-.logo{
-  width:48px;
-  height:48px;
-  border-radius:14px;
-  object-fit:cover;
-  border:1px solid rgba(215,169,40,.45);
-  box-shadow:0 0 25px rgba(215,169,40,.12);
-}
-
-.brand h1{
-  font-size:20px;
-  color:var(--gold2);
-  letter-spacing:.5px;
-}
-
-.brand p{
-  color:var(--muted);
-  font-size:11px;
-  margin-top:3px;
-}
-
-.live{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  color:#fff;
-  font-size:12px;
-  border:1px solid rgba(40,209,124,.25);
-  padding:8px 12px;
-  border-radius:30px;
-  background:rgba(40,209,124,.07);
-}
-
-.live-dot{
-  width:8px;
-  height:8px;
-  border-radius:50%;
-  background:var(--green);
-  box-shadow:0 0 12px var(--green);
-  animation:pulse 1.4s infinite;
-}
-
-@keyframes pulse{
-  50%{opacity:.35;transform:scale(.7)}
-}
-
-/* HERO */
-
-.hero{
-  padding:55px 0 25px;
-  text-align:center;
-}
-
-.badge{
-  display:inline-flex;
-  padding:7px 13px;
-  border:1px solid rgba(215,169,40,.25);
-  border-radius:30px;
-  color:var(--gold2);
-  background:rgba(215,169,40,.06);
-  font-size:12px;
-  margin-bottom:18px;
-}
-
-.hero h2{
-  font-size:clamp(28px,6vw,55px);
-  line-height:1.15;
-  margin-bottom:15px;
-}
-
-.hero h2 span{
-  color:var(--gold2);
-}
-
-.hero p{
-  max-width:750px;
-  margin:auto;
-  color:#aaa;
-  font-size:14px;
-  line-height:2;
-}
-
-/* CLOCK */
-
-.clock-box{
-  margin:25px auto;
-  width:min(600px,100%);
-  background:linear-gradient(
-    135deg,
-    rgba(215,169,40,.1),
-    rgba(255,255,255,.025)
-  );
-  border:1px solid rgba(215,169,40,.2);
-  border-radius:22px;
-  padding:18px;
-}
-
-.clock-title{
-  color:var(--muted);
-  font-size:11px;
-  margin-bottom:5px;
-}
-
-.clock{
-  font-size:30px;
-  font-weight:bold;
-  color:var(--gold2);
-}
-
-.date{
-  color:#aaa;
-  font-size:12px;
-  margin-top:4px;
-}
-
-/* CONTROLS */
-
-.controls{
-  background:rgba(16,16,16,.85);
-  border:1px solid var(--line);
-  border-radius:22px;
-  padding:15px;
-  margin:25px 0;
-  display:grid;
-  grid-template-columns:1.3fr 1fr 1fr 1fr;
-  gap:10px;
-}
-
-.control{
-  position:relative;
-}
-
-.control input,
-.control select{
-  width:100%;
-  height:46px;
-  border:1px solid #292929;
-  border-radius:13px;
-  background:#0b0b0b;
-  color:#eee;
-  padding:0 13px;
-  outline:none;
-}
-
-.control input:focus,
-.control select:focus{
-  border-color:rgba(215,169,40,.7);
-}
-
-/* STATS */
-
-.stats{
-  display:grid;
-  grid-template-columns:repeat(4,1fr);
-  gap:12px;
-  margin-bottom:25px;
-}
-
-.stat{
-  background:linear-gradient(145deg,#121212,#0b0b0b);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:18px;
-}
-
-.stat small{
-  color:#888;
-  font-size:11px;
-}
-
-.stat strong{
-  display:block;
-  font-size:25px;
-  margin-top:7px;
-  color:var(--gold2);
-}
-
-/* CALENDAR */
-
-.calendar{
-  background:#0d0d0d;
-  border:1px solid var(--line);
-  border-radius:24px;
-  overflow:hidden;
-  margin-bottom:30px;
-}
-
-.calendar-head{
-  padding:18px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:15px;
-  border-bottom:1px solid var(--line);
-}
-
-.calendar-head h3{
-  font-size:17px;
-}
-
-.refresh{
-  border:1px solid rgba(215,169,40,.3);
-  color:var(--gold2);
-  background:rgba(215,169,40,.08);
-  padding:9px 14px;
-  border-radius:12px;
-  cursor:pointer;
-}
-
-.refresh:hover{
-  background:rgba(215,169,40,.16);
-}
-
-.table-wrap{
-  overflow-x:auto;
-}
-
-table{
-  width:100%;
-  border-collapse:collapse;
-  min-width:800px;
-}
-
-thead{
-  background:#151515;
-}
-
-th{
-  text-align:right;
-  color:#999;
-  font-size:11px;
-  padding:14px;
-  white-space:nowrap;
-}
-
-td{
-  padding:15px 14px;
-  border-top:1px solid #202020;
-  font-size:13px;
-  vertical-align:middle;
-}
-
-tr:hover td{
-  background:rgba(215,169,40,.035);
-}
-
-/* IMPACT */
-
-.impact{
-  display:inline-flex;
-  align-items:center;
-  gap:5px;
-  padding:6px 9px;
-  border-radius:9px;
-  font-size:11px;
-  white-space:nowrap;
-}
-
-.high{
-  color:#ff7180;
-  background:rgba(255,77,94,.09);
-  border:1px solid rgba(255,77,94,.18);
-}
-
-.medium{
-  color:#ffb55e;
-  background:rgba(255,159,67,.09);
-  border:1px solid rgba(255,159,67,.18);
-}
-
-.low{
-  color:#67d9a0;
-  background:rgba(40,209,124,.08);
-  border:1px solid rgba(40,209,124,.16);
-}
-
-/* CURRENCY */
-
-.currency{
-  font-weight:bold;
-  color:#fff;
-}
-
-.currency.usd{color:#6fcf97}
-.currency.eur{color:#7db5ff}
-.currency.gbp{color:#c79cff}
-.currency.jpy{color:#ff9d9d}
-.currency.aud{color:#65d6cb}
-.currency.cad{color:#ffb56b}
-.currency.chf{color:#f4c76d}
-.currency.nzd{color:#78a8ff}
-
-/* VALUES */
-
-.actual{
-  color:var(--gold2);
-  font-weight:bold;
-}
-
-.forecast{
-  color:#aaa;
-}
-
-.previous{
-  color:#777;
-}
-
-.countdown{
-  font-weight:bold;
-  color:#fff;
-}
-
-.past{
-  color:#666;
-}
-
-.next-event{
-  background:rgba(215,169,40,.055);
-  box-shadow:inset 3px 0 0 var(--gold);
-}
-
-/* EMPTY / ERROR */
-
-.status{
-  text-align:center;
-  padding:50px 20px;
-  color:#888;
-}
-
-.spinner{
-  width:30px;
-  height:30px;
-  border:3px solid #292929;
-  border-top-color:var(--gold);
-  border-radius:50%;
-  animation:spin 1s linear infinite;
-  margin:0 auto 15px;
-}
-
-@keyframes spin{
-  to{transform:rotate(360deg)}
-}
-
-/* INFO */
-
-.info{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:15px;
-  margin-bottom:35px;
-}
-
-.info-card{
-  padding:20px;
-  background:#0e0e0e;
-  border:1px solid var(--line);
-  border-radius:20px;
-}
-
-.info-icon{
-  font-size:25px;
-  margin-bottom:10px;
-}
-
-.info-card h4{
-  color:var(--gold2);
-  margin-bottom:8px;
-}
-
-.info-card p{
-  color:#999;
-  font-size:12px;
-  line-height:2;
-}
-
-/* FOOTER */
-
-footer{
-  text-align:center;
-  padding:30px 15px;
-  border-top:1px solid var(--line);
-  color:#777;
-  font-size:11px;
-  line-height:2;
-}
-
-footer strong{
-  color:var(--gold2);
-}
-
-/* MOBILE */
-
-@media(max-width:850px){
-
-  .controls{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .stats{
-    grid-template-columns:1fr 1fr;
-  }
-
-  .info{
-    grid-template-columns:1fr;
-  }
-}
-
-@media(max-width:600px){
-
-  .nav{
-    min-height:65px;
-  }
-
-  .logo{
-    width:40px;
-    height:40px;
-  }
-
-  .brand h1{
-    font-size:17px;
-  }
-
-  .live{
-    padding:7px 9px;
-    font-size:10px;
-  }
-
-  .hero{
-    padding:35px 0 15px;
-  }
-
-  .hero h2{
-    font-size:31px;
-  }
-
-  .hero p{
-    font-size:12px;
-  }
-
-  .controls{
-    grid-template-columns:1fr;
-  }
-
-  .stats{
-    gap:8px;
-  }
-
-  .stat{
-    padding:14px;
-  }
-
-  .stat strong{
-    font-size:21px;
-  }
-
-  .calendar{
-    border-radius:17px;
-  }
-}
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ShahanFX Economic Calendar</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --gold: #d4af37;
+      --gold-light: #f4d675;
+      --bg: #070707;
+      --card: #101010;
+      --card2: #151515;
+      --border: #292929;
+      --text: #f4f4f4;
+      --muted: #999;
+      --red: #ff3b30;
+      --orange: #ff9800;
+      --green: #20c997;
+    }
+
+    body {
+      background:
+        radial-gradient(circle at top, rgba(212,175,55,.10), transparent 35%),
+        var(--bg);
+      color: var(--text);
+      font-family: Arial, Tahoma, sans-serif;
+      min-height: 100vh;
+    }
+
+    .container {
+      width: min(1400px, 96%);
+      margin: auto;
+    }
+
+    /* HEADER */
+
+    header {
+      padding: 20px 0;
+      border-bottom: 1px solid var(--border);
+      background: rgba(5,5,5,.94);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(12px);
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 15px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .logo {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      object-fit: cover;
+      border: 2px solid var(--gold);
+      box-shadow: 0 0 18px rgba(212,175,55,.25);
+    }
+
+    .brand h1 {
+      font-size: 22px;
+      color: var(--gold-light);
+    }
+
+    .brand p {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 4px;
+    }
+
+    .live-status {
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      color: #ddd;
+      font-size: 13px;
+    }
+
+    .live-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: #20c997;
+      box-shadow: 0 0 10px #20c997;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      50% {
+        opacity: .35;
+      }
+    }
+
+    /* HERO */
+
+    .hero {
+      text-align: center;
+      padding: 34px 10px 22px;
+    }
+
+    .hero h2 {
+      font-size: clamp(25px, 5vw, 42px);
+      color: var(--gold-light);
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      color: var(--muted);
+      font-size: 14px;
+    }
+
+    /* CONTROLS */
+
+    .controls {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 15px;
+      margin-bottom: 18px;
+    }
+
+    .control-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    button,
+    select,
+    input {
+      border: 1px solid var(--border);
+      background: var(--card2);
+      color: var(--text);
+      border-radius: 11px;
+      padding: 11px 14px;
+      font-size: 14px;
+      outline: none;
+    }
+
+    button {
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    button:hover,
+    button.active {
+      border-color: var(--gold);
+      color: var(--gold-light);
+      box-shadow: 0 0 12px rgba(212,175,55,.12);
+    }
+
+    .date-buttons {
+      margin-bottom: 12px;
+    }
+
+    .search {
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .search input {
+      width: 100%;
+    }
+
+    /* IMPACT */
+
+    .impact-buttons {
+      margin-top: 12px;
+    }
+
+    .impact {
+      font-weight: bold;
+    }
+
+    .high {
+      color: var(--red);
+    }
+
+    .medium {
+      color: var(--orange);
+    }
+
+    .low {
+      color: var(--green);
+    }
+
+    /* INFO */
+
+    .info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 13px 15px;
+      border-radius: 14px;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+    }
+
+    .info-item {
+      color: #ccc;
+      font-size: 13px;
+    }
+
+    .info-item strong {
+      color: var(--gold-light);
+    }
+
+    /* CALENDAR */
+
+    .calendar {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      overflow: hidden;
+      margin-bottom: 30px;
+    }
+
+    .calendar-head {
+      display: grid;
+      grid-template-columns:
+        90px
+        70px
+        minmax(190px, 1fr)
+        120px
+        120px
+        120px
+        130px;
+      gap: 0;
+      background: #181818;
+      border-bottom: 1px solid var(--border);
+      color: var(--gold-light);
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .calendar-head div {
+      padding: 15px 10px;
+      border-left: 1px solid var(--border);
+    }
+
+    #events {
+      width: 100%;
+    }
+
+    .event {
+      display: grid;
+      grid-template-columns:
+        90px
+        70px
+        minmax(190px, 1fr)
+        120px
+        120px
+        120px
+        130px;
+      border-bottom: 1px solid var(--border);
+      transition: .2s;
+    }
+
+    .event:hover {
+      background: rgba(212,175,55,.045);
+    }
+
+    .event > div {
+      padding: 15px 10px;
+      border-left: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .time {
+      direction: ltr;
+      justify-content: center;
+      color: #ddd;
+      font-weight: bold;
+    }
+
+    .currency {
+      direction: ltr;
+      justify-content: center;
+      color: var(--gold-light);
+      font-weight: bold;
+    }
+
+    .event-name {
+      font-weight: bold;
+      line-height: 1.5;
+    }
+
+    .event-name small {
+      display: block;
+      color: var(--muted);
+      font-weight: normal;
+      margin-top: 4px;
+      font-size: 11px;
+    }
+
+    .value {
+      direction: ltr;
+      justify-content: center;
+      color: #ddd;
+    }
+
+    .countdown {
+      direction: ltr;
+      justify-content: center;
+      color: var(--gold-light);
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .impact-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      margin-left: 7px;
+      display: inline-block;
+    }
+
+    .impact-high {
+      background: var(--red);
+      box-shadow: 0 0 9px rgba(255,59,48,.55);
+    }
+
+    .impact-medium {
+      background: var(--orange);
+      box-shadow: 0 0 9px rgba(255,152,0,.45);
+    }
+
+    .impact-low {
+      background: var(--green);
+      box-shadow: 0 0 9px rgba(32,201,151,.45);
+    }
+
+    /* STATES */
+
+    .state {
+      padding: 55px 20px;
+      text-align: center;
+      color: var(--muted);
+    }
+
+    .loader {
+      width: 35px;
+      height: 35px;
+      border: 3px solid #333;
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin .8s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    .error {
+      color: var(--red);
+    }
+
+    /* FOOTER */
+
+    footer {
+      border-top: 1px solid var(--border);
+      text-align: center;
+      padding: 25px 10px;
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    footer strong {
+      color: var(--gold);
+    }
+
+    /* MOBILE */
+
+    @media (max-width: 800px) {
+
+      header {
+        position: relative;
+      }
+
+      .header-inner {
+        align-items: flex-start;
+      }
+
+      .brand h1 {
+        font-size: 18px;
+      }
+
+      .logo {
+        width: 44px;
+        height: 44px;
+      }
+
+      .live-status {
+        font-size: 11px;
+      }
+
+      .calendar {
+        overflow-x: auto;
+      }
+
+      .calendar-head,
+      .event {
+        min-width: 850px;
+      }
+
+      .hero {
+        padding-top: 25px;
+      }
+
+      .controls {
+        border-radius: 14px;
+      }
+
+      button,
+      select,
+      input {
+        font-size: 13px;
+        padding: 10px 11px;
+      }
+    }
+  </style>
 </head>
 
 <body>
 
 <header>
-  <div class="container nav">
+  <div class="container header-inner">
 
     <div class="brand">
 
       <img
         class="logo"
         src="https://raw.githubusercontent.com/tradingshahan-sys/shahanfx-backend/main/IMG_20260901_021941.jpg"
-        alt="ShahanFX"
-      >
+        alt="ShahanFX">
 
       <div>
         <h1>ShahanFX</h1>
-        <p>کاتژمێری ئابووری و هەواڵی Forex</p>
+        <p>Economic Calendar</p>
       </div>
 
     </div>
 
-    <div class="live">
+    <div class="live-status">
       <span class="live-dot"></span>
-      LIVE
+      <span>LIVE DATA</span>
     </div>
 
   </div>
 </header>
 
-
 <main class="container">
 
   <section class="hero">
-
-    <div class="badge">
-      📡 داتای ڕاستەوخۆی هەواڵە ئابوورییەکان
-    </div>
-
-    <h2>
-      کاتی <span>هەواڵەکانی Forex</span>
-    </h2>
-
+    <h2>📅 ڕۆژژمێری ئابووری</h2>
     <p>
-      لێرە دەتوانیت هەموو هەواڵە گرنگە ئابوورییەکان ببینیت،
-      کاریگەریی هەواڵەکە، دراوە پەیوەندیدارەکە،
-      کاتی بڵاوکردنەوە و Actual / Forecast / Previous
-      بە شێوەی ڕاستەوخۆ.
+      هەموو گرنگترین هەواڵ و داتا ئابوورییەکانی Forex لە یەک شوێن
     </p>
-
-    <div class="clock-box">
-
-      <div class="clock-title">
-        کاتی ئێستا — Asia/Baghdad
-      </div>
-
-      <div id="clock" class="clock">
-        --:--:--
-      </div>
-
-      <div id="date" class="date">
-        --
-      </div>
-
-    </div>
-
   </section>
-
 
   <section class="controls">
 
-    <div class="control">
-      <input
-        id="search"
-        type="search"
-        placeholder="🔎 گەڕان بۆ ناوی هەواڵ..."
-      >
+    <div class="control-row date-buttons">
+
+      <button class="active" data-period="today">
+        ئەمڕۆ
+      </button>
+
+      <button data-period="tomorrow">
+        سبەی
+      </button>
+
+      <button data-period="week">
+        ئەم هەفتەیە
+      </button>
+
+      <button data-period="nextweek">
+        هەفتەی داهاتوو
+      </button>
+
     </div>
 
-    <div class="control">
-      <select id="impact">
-        <option value="all">هەموو کاریگەرییەکان</option>
-        <option value="high">🔴 بەرز</option>
-        <option value="medium">🟠 مامناوەند</option>
-        <option value="low">🟢 نزم</option>
+    <div class="control-row">
+
+      <select id="currencyFilter">
+        <option value="ALL">هەموو دراوەکان</option>
+        <option value="USD">USD 🇺🇸</option>
+        <option value="EUR">EUR 🇪🇺</option>
+        <option value="GBP">GBP 🇬🇧</option>
+        <option value="JPY">JPY 🇯🇵</option>
+        <option value="AUD">AUD 🇦🇺</option>
+        <option value="CAD">CAD 🇨🇦</option>
+        <option value="CHF">CHF 🇨🇭</option>
+        <option value="NZD">NZD 🇳🇿</option>
+        <option value="CNY">CNY 🇨🇳</option>
       </select>
-    </div>
 
-    <div class="control">
-      <select id="currency">
-        <option value="all">هەموو دراوەکان</option>
-        <option value="USD">USD — دۆلار</option>
-        <option value="EUR">EUR — یۆرۆ</option>
-        <option value="GBP">GBP — پاوەند</option>
-        <option value="JPY">JPY — یەن</option>
-        <option value="AUD">AUD — دۆلاری ئەوسترالیا</option>
-        <option value="CAD">CAD — دۆلاری کەنەدا</option>
-        <option value="CHF">CHF — فرانکی سویسرا</option>
-        <option value="NZD">NZD — دۆلاری نیوزیلەندا</option>
+      <select id="impactFilter">
+        <option value="ALL">هەموو کاریگەرییەکان</option>
+        <option value="High">🔴 High</option>
+        <option value="Medium">🟠 Medium</option>
+        <option value="Low">🟢 Low</option>
       </select>
-    </div>
 
-    <div class="control">
-      <select id="period">
-        <option value="all">هەموو کاتەکان</option>
-        <option value="today">ئەمڕۆ</option>
-        <option value="tomorrow">سبەی</option>
-        <option value="week">ئەم هەفتەیە</option>
-      </select>
-    </div>
-
-  </section>
-
-
-  <section class="stats">
-
-    <div class="stat">
-      <small>هەموو هەواڵەکان</small>
-      <strong id="totalEvents">0</strong>
-    </div>
-
-    <div class="stat">
-      <small>کاریگەری بەرز</small>
-      <strong id="highEvents">0</strong>
-    </div>
-
-    <div class="stat">
-      <small>هەواڵی USD</small>
-      <strong id="usdEvents">0</strong>
-    </div>
-
-    <div class="stat">
-      <small>داهاتوو</small>
-      <strong id="nextEvents">0</strong>
-    </div>
-
-  </section>
-
-
-  <section class="calendar">
-
-    <div class="calendar-head">
-
-      <div>
-        <h3>📅 ڕۆژنامەی هەواڵە ئابوورییەکان</h3>
+      <div class="search">
+        <input
+          id="searchInput"
+          type="search"
+          placeholder="🔎 گەڕان لە ناوی هەواڵ..."
+        >
       </div>
 
-      <button id="refreshBtn" class="refresh">
+      <button id="refreshBtn">
         🔄 نوێکردنەوە
       </button>
 
     </div>
 
+  </section>
 
-    <div class="table-wrap">
+  <section class="info-bar">
 
-      <table>
+    <div class="info-item">
+      کاتی ناوچە:
+      <strong>Asia/Baghdad</strong>
+    </div>
 
-        <thead>
-          <tr>
-            <th>کات</th>
-            <th>دراو</th>
-            <th>کاریگەری</th>
-            <th>هەواڵ</th>
-            <th>Actual</th>
-            <th>Forecast</th>
-            <th>Previous</th>
-            <th>دۆخ</th>
-          </tr>
-        </thead>
+    <div class="info-item">
+      کۆی ڕووداوەکان:
+      <strong id="eventCount">0</strong>
+    </div>
 
-        <tbody id="events">
-
-          <tr>
-            <td colspan="8">
-              <div class="status">
-                <div class="spinner"></div>
-                داتاکان بار دەکرێن...
-              </div>
-            </td>
-          </tr>
-
-        </tbody>
-
-      </table>
-
+    <div class="info-item">
+      دوا نوێکردنەوە:
+      <strong id="lastUpdate">--</strong>
     </div>
 
   </section>
 
+  <section class="calendar">
 
-  <section class="info">
+    <div class="calendar-head">
 
-    <div class="info-card">
-
-      <div class="info-icon">🔴</div>
-
-      <h4>کاریگەری بەرز</h4>
-
-      <p>
-        هەواڵە گرنگەکان وەک CPI، NFP، FOMC،
-        Interest Rate و GDP کە دەتوانن جوڵەی
-        بەهێزیان لە بازاڕ دروست بکەن.
-      </p>
+      <div>کات</div>
+      <div>دراو</div>
+      <div>ڕووداو</div>
+      <div>Actual</div>
+      <div>Forecast</div>
+      <div>Previous</div>
+      <div>Countdown</div>
 
     </div>
 
+    <div id="events">
 
-    <div class="info-card">
-
-      <div class="info-icon">📊</div>
-
-      <h4>Actual / Forecast</h4>
-
-      <p>
-        Actual ئەنجامی ڕاستەقینەی هەواڵەکەیە،
-        Forecast پێشبینییەکەیە و Previous
-        ئەنجامی پێشوویە.
-      </p>
-
-    </div>
-
-
-    <div class="info-card">
-
-      <div class="info-icon">⏳</div>
-
-      <h4>ئاگاداری لە هەواڵ</h4>
-
-      <p>
-        هەمیشە پێش هەواڵە کاریگەرەکان ئاگاداربە،
-        بە تایبەتی ئەگەر لەسەر Gold/XAUUSD
-        یان Forex ترید دەکەیت.
-      </p>
+      <div class="state">
+        <div class="loader"></div>
+        <div>داتا دەهێنرێت...</div>
+      </div>
 
     </div>
 
@@ -777,450 +589,243 @@ footer strong{
 
 </main>
 
-
 <footer>
-
-  <strong>ShahanFX</strong> © 2026<br>
-
-  سیستەمی کاتی هەواڵی Forex و بازاڕی دارایی
-
-  <br>
-
-  داتا بە شێوەی ڕاستەوخۆ لە Backend ـەوە وەردەگیرێت.
-
+  Powered by <strong>ShahanFX</strong> — Live Forex Economic Calendar
 </footer>
-
 
 <script>
 
-const API_URL = "/api/news";
+const state = {
+  period: "today",
+  currency: "ALL",
+  impact: "ALL",
+  search: "",
+  events: []
+};
 
-let allEvents = [];
+const eventsEl = document.getElementById("events");
+const countEl = document.getElementById("eventCount");
+const updateEl = document.getElementById("lastUpdate");
+
+const currencyFilter =
+  document.getElementById("currencyFilter");
+
+const impactFilter =
+  document.getElementById("impactFilter");
+
+const searchInput =
+  document.getElementById("searchInput");
+
+const refreshBtn =
+  document.getElementById("refreshBtn");
 
 
-/* CLOCK */
+/* DATE HELPERS */
 
-function updateClock(){
+function dateString(date) {
+
+  const y = date.getFullYear();
+
+  const m = String(date.getMonth() + 1)
+    .padStart(2, "0");
+
+  const d = String(date.getDate())
+    .padStart(2, "0");
+
+  return `${y}-${m}-${d}`;
+}
+
+
+function getPeriodDates(period) {
 
   const now = new Date();
 
-  const formatter =
-    new Intl.DateTimeFormat(
-      "ku-IQ",
-      {
-        timeZone:"Asia/Baghdad",
-        hour:"2-digit",
-        minute:"2-digit",
-        second:"2-digit",
-        hour12:false
-      }
+  now.setHours(0, 0, 0, 0);
+
+  const day = now.getDay();
+
+  if (period === "today") {
+
+    return {
+      from: dateString(now),
+      to: dateString(now)
+    };
+
+  }
+
+  if (period === "tomorrow") {
+
+    const tomorrow = new Date(now);
+
+    tomorrow.setDate(
+      tomorrow.getDate() + 1
     );
 
-  const dateFormatter =
-    new Intl.DateTimeFormat(
-      "ku-IQ",
-      {
-        timeZone:"Asia/Baghdad",
-        weekday:"long",
-        year:"numeric",
-        month:"long",
-        day:"numeric"
-      }
+    return {
+      from: dateString(tomorrow),
+      to: dateString(tomorrow)
+    };
+
+  }
+
+  if (period === "week") {
+
+    const monday = new Date(now);
+
+    const diff = day === 0 ? -6 : 1 - day;
+
+    monday.setDate(
+      monday.getDate() + diff
     );
 
-  document.getElementById("clock").textContent =
-    formatter.format(now);
+    const sunday = new Date(monday);
 
-  document.getElementById("date").textContent =
-    dateFormatter.format(now);
-}
+    sunday.setDate(
+      sunday.getDate() + 6
+    );
 
-setInterval(updateClock,1000);
-updateClock();
+    return {
+      from: dateString(monday),
+      to: dateString(sunday)
+    };
 
-
-/* NORMALIZE DATA */
-
-function normalizeEvent(item){
-
-  const date =
-    item.date ||
-    item.datetime ||
-    item.time ||
-    "";
-
-  const event =
-    item.event ||
-    item.title ||
-    item.name ||
-    "هەواڵی نەناسراو";
-
-  const currency =
-    String(
-      item.currency ||
-      item.country ||
-      ""
-    ).toUpperCase();
-
-  let impact =
-    String(
-      item.impact ||
-      item.importance ||
-      ""
-    ).toLowerCase();
-
-  if(
-    impact.includes("high") ||
-    impact.includes("important")
-  ){
-    impact = "high";
-  }
-  else if(
-    impact.includes("medium") ||
-    impact.includes("moderate")
-  ){
-    impact = "medium";
-  }
-  else{
-    impact = "low";
   }
 
-  return {
-    date,
-    event,
-    currency,
-    impact,
+  if (period === "nextweek") {
 
-    actual:
-      item.actual ??
-      item.actualValue ??
-      "-",
+    const monday = new Date(now);
 
-    forecast:
-      item.forecast ??
-      item.estimate ??
-      "-",
+    const diff = day === 0 ? -6 : 1 - day;
 
-    previous:
-      item.previous ??
-      item.previousValue ??
-      "-"
-  };
+    monday.setDate(
+      monday.getDate() + diff + 7
+    );
+
+    const sunday = new Date(monday);
+
+    sunday.setDate(
+      sunday.getDate() + 6
+    );
+
+    return {
+      from: dateString(monday),
+      to: dateString(sunday)
+    };
+
+  }
+
 }
 
 
-/* LOAD NEWS */
+/* LOAD */
 
-async function loadNews(){
+async function loadCalendar() {
 
-  const tbody =
-    document.getElementById("events");
-
-  tbody.innerHTML = `
-    <tr>
-      <td colspan="8">
-        <div class="status">
-          <div class="spinner"></div>
-          هەواڵەکان نوێ دەکرێنەوە...
-        </div>
-      </td>
-    </tr>
+  eventsEl.innerHTML = `
+    <div class="state">
+      <div class="loader"></div>
+      <div>داتا دەهێنرێت...</div>
+    </div>
   `;
 
-  try{
+  try {
+
+    const dates = getPeriodDates(
+      state.period
+    );
+
+    const url =
+      `/api/news?from=${dates.from}&to=${dates.to}`;
 
     const response =
-      await fetch(
-        API_URL +
-        "?t=" +
-        Date.now(),
+      await fetch(url, {
+        cache: "no-store"
+      });
+
+    if (!response.ok) {
+      throw new Error(
+        "HTTP " + response.status
+      );
+    }
+
+    const data = await response.json();
+
+    if (!data.ok) {
+      throw new Error(
+        data.error || "API Error"
+      );
+    }
+
+    state.events =
+      Array.isArray(data.events)
+        ? data.events
+        : [];
+
+    render();
+
+    updateEl.textContent =
+      new Date().toLocaleTimeString(
+        "ku-IQ",
         {
-          cache:"no-store"
+          timeZone: "Asia/Baghdad",
+          hour: "2-digit",
+          minute: "2-digit",
+          second: "2-digit"
         }
       );
 
-    const data =
-      await response.json();
+  } catch (error) {
 
-    if(!response.ok || !data.ok){
+    console.error(error);
 
-      throw new Error(
-        data.error ||
-        "هەڵە لە وەرگرتنی داتا"
-      );
-    }
+    eventsEl.innerHTML = `
+      <div class="state error">
+        <div style="font-size:35px;margin-bottom:10px;">
+          ⚠️
+        </div>
 
-    const raw =
-      Array.isArray(data.events)
-        ? data.events
-        : Array.isArray(data.data)
-          ? data.data
-          : [];
+        <div>
+          نەیتوانرا داتای ڕاستەوخۆ وەربگیرێت.
+        </div>
 
-    allEvents =
-      raw.map(normalizeEvent);
-
-    updateStats();
-
-    renderEvents();
-
-  }
-  catch(error){
-
-    console.error(
-      "ShahanFX News:",
-      error
-    );
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="8">
-          <div class="status">
-            ❌ نەتوانرا داتای هەواڵەکان وەربگیرێت.
-            <br><br>
-            تکایە Backend / API ـەکە بپشکنە.
-          </div>
-        </td>
-      </tr>
-    `;
-  }
-}
-
-
-/* FORMAT DATE */
-
-function formatDate(value){
-
-  if(!value)
-    return "--";
-
-  const d =
-    new Date(value);
-
-  if(isNaN(d.getTime()))
-    return value;
-
-  return new Intl.DateTimeFormat(
-    "ku-IQ",
-    {
-      timeZone:"Asia/Baghdad",
-      hour:"2-digit",
-      minute:"2-digit",
-      hour12:false
-    }
-  ).format(d);
-}
-
-
-/* EVENT STATUS */
-
-function getStatus(date){
-
-  if(!date)
-    return {
-      text:"—",
-      class:"past"
-    };
-
-  const d =
-    new Date(date);
-
-  if(isNaN(d.getTime()))
-    return {
-      text:"—",
-      class:"past"
-    };
-
-  const diff =
-    d.getTime() -
-    Date.now();
-
-  if(diff <= 0){
-
-    return {
-      text:"بڵاوکراوەتەوە",
-      class:"past"
-    };
-
-  }
-
-  const minutes =
-    Math.floor(
-      diff / 60000
-    );
-
-  if(minutes < 60){
-
-    return {
-      text:
-        `${minutes} خولەک`,
-      class:"countdown"
-    };
-
-  }
-
-  const hours =
-    Math.floor(
-      minutes / 60
-    );
-
-  return {
-    text:
-      `${hours} کاتژمێر`,
-    class:"countdown"
-  };
-}
-
-
-/* IMPACT */
-
-function impactHTML(impact){
-
-  if(impact === "high"){
-
-    return `
-      <span class="impact high">
-        🔴 بەرز
-      </span>
+        <div style="margin-top:8px;font-size:12px;">
+          تکایە دڵنیابە API ـەکە چالاکە.
+        </div>
+      </div>
     `;
 
   }
 
-  if(impact === "medium"){
-
-    return `
-      <span class="impact medium">
-        🟠 مامناوەند
-      </span>
-    `;
-
-  }
-
-  return `
-    <span class="impact low">
-      🟢 نزم
-    </span>
-  `;
-}
-
-
-/* CURRENCY CLASS */
-
-function currencyClass(currency){
-
-  return String(currency)
-    .toLowerCase()
-    .replace(/[^a-z]/g,"");
 }
 
 
 /* FILTER */
 
-function getFiltered(){
+function filteredEvents() {
 
-  const search =
-    document
-      .getElementById("search")
-      .value
-      .trim()
-      .toLowerCase();
+  return state.events.filter(event => {
 
-  const impact =
-    document
-      .getElementById("impact")
-      .value;
+    const currencyOK =
+      state.currency === "ALL" ||
+      String(event.currency || "").toUpperCase()
+        === state.currency;
 
-  const currency =
-    document
-      .getElementById("currency")
-      .value;
+    const impact =
+      String(event.impact || "").toLowerCase();
 
-  const period =
-    document
-      .getElementById("period")
-      .value;
+    const impactOK =
+      state.impact === "ALL" ||
+      impact === state.impact.toLowerCase();
 
+    const searchOK =
+      !state.search ||
+      String(event.event || event.name || "")
+        .toLowerCase()
+        .includes(state.search.toLowerCase());
 
-  return allEvents.filter(item => {
-
-    const text =
-      (
-        item.event +
-        " " +
-        item.currency
-      ).toLowerCase();
-
-
-    if(
-      search &&
-      !text.includes(search)
-    ){
-      return false;
-    }
-
-
-    if(
-      impact !== "all" &&
-      item.impact !== impact
-    ){
-      return false;
-    }
-
-
-    if(
-      currency !== "all" &&
-      item.currency !== currency
-    ){
-      return false;
-    }
-
-
-    if(period !== "all"){
-
-      const date =
-        new Date(item.date);
-
-      if(!isNaN(date.getTime())){
-
-        const now =
-          new Date();
-
-        const baghdadNow =
-          new Intl.DateTimeFormat(
-            "en-CA",
-            {
-              timeZone:"Asia/Baghdad",
-              year:"numeric",
-              month:"2-digit",
-              day:"2-digit"
-            }
-          ).format(now);
-
-        const itemDate =
-          new Intl.DateTimeFormat(
-            "en-CA",
-            {
-              timeZone:"Asia/Baghdad",
-              year:"numeric",
-              month:"2-digit",
-              day:"2-digit"
-            }
-          ).format(date);
-
-
-        if(
-          period === "today" &&
-          itemDate !== baghdadNow
-        ){
-          return false;
-        }
-
-      }
-
-    }
-
-
-    return true;
+    return currencyOK &&
+           impactOK &&
+           searchOK;
 
   });
 
@@ -1229,177 +834,259 @@ function getFiltered(){
 
 /* RENDER */
 
-function renderEvents(){
+function render() {
 
-  const tbody =
-    document.getElementById("events");
+  const list = filteredEvents();
 
-  const events =
-    getFiltered();
+  countEl.textContent = list.length;
 
+  if (!list.length) {
 
-  if(!events.length){
-
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="8">
-          <div class="status">
-            هیچ هەواڵێک نەدۆزرایەوە.
-          </div>
-        </td>
-      </tr>
+    eventsEl.innerHTML = `
+      <div class="state">
+        هیچ ڕووداوێک نەدۆزرایەوە.
+      </div>
     `;
 
     return;
+
   }
 
+  eventsEl.innerHTML =
+    list.map((event, index) => {
 
-  let nextIndex = -1;
+      const impact =
+        String(event.impact || "Low");
 
-  let nearest =
-    Infinity;
+      let impactClass =
+        "impact-low";
 
-
-  events.forEach((item,index)=>{
-
-    const d =
-      new Date(item.date);
-
-    if(!isNaN(d.getTime())){
-
-      const diff =
-        d.getTime() -
-        Date.now();
-
-      if(
-        diff > 0 &&
-        diff < nearest
-      ){
-
-        nearest = diff;
-        nextIndex = index;
+      if (impact.toLowerCase() === "high") {
+        impactClass = "impact-high";
       }
 
-    }
+      if (impact.toLowerCase() === "medium") {
+        impactClass = "impact-medium";
+      }
 
-  });
+      const eventName =
+        event.event ||
+        event.name ||
+        "Unknown Event";
 
+      const currency =
+        event.currency ||
+        "--";
 
-  tbody.innerHTML =
-    events.map((item,index)=>{
+      const actual =
+        event.actual ??
+        "--";
 
-      const status =
-        getStatus(item.date);
+      const forecast =
+        event.forecast ??
+        "--";
 
-      const nextClass =
-        index === nextIndex
-          ? "next-event"
-          : "";
+      const previous =
+        event.previous ??
+        "--";
+
+      const time =
+        formatEventTime(event);
+
+      const timestamp =
+        getEventTimestamp(event);
 
       return `
 
-        <tr class="${nextClass}">
+        <div class="event">
 
-          <td>
-            <strong>
-              ${formatDate(item.date)}
-            </strong>
-          </td>
+          <div class="time">
+            ${escapeHTML(time)}
+          </div>
 
-          <td>
-            <span class="currency ${currencyClass(item.currency)}">
-              ${item.currency || "--"}
+          <div class="currency">
+            ${escapeHTML(currency)}
+          </div>
+
+          <div class="event-name">
+
+            <span
+              class="impact-dot ${impactClass}">
             </span>
-          </td>
 
-          <td>
-            ${impactHTML(item.impact)}
-          </td>
+            ${escapeHTML(eventName)}
 
-          <td>
-            <strong>
-              ${escapeHTML(item.event)}
-            </strong>
-          </td>
+            <small>
+              ${escapeHTML(impact)}
+            </small>
 
-          <td class="actual">
-            ${escapeHTML(item.actual)}
-          </td>
+          </div>
 
-          <td class="forecast">
-            ${escapeHTML(item.forecast)}
-          </td>
+          <div class="value">
+            ${escapeHTML(String(actual))}
+          </div>
 
-          <td class="previous">
-            ${escapeHTML(item.previous)}
-          </td>
+          <div class="value">
+            ${escapeHTML(String(forecast))}
+          </div>
 
-          <td class="${status.class}">
-            ${status.text}
-          </td>
+          <div class="value">
+            ${escapeHTML(String(previous))}
+          </div>
 
-        </tr>
+          <div
+            class="countdown"
+            data-time="${timestamp}"
+            id="countdown-${index}">
+            --
+          </div>
+
+        </div>
+
       `;
 
     }).join("");
 
-}
-
-
-/* STATS */
-
-function updateStats(){
-
-  document.getElementById(
-    "totalEvents"
-  ).textContent =
-    allEvents.length;
-
-
-  document.getElementById(
-    "highEvents"
-  ).textContent =
-    allEvents.filter(
-      e => e.impact === "high"
-    ).length;
-
-
-  document.getElementById(
-    "usdEvents"
-  ).textContent =
-    allEvents.filter(
-      e => e.currency === "USD"
-    ).length;
-
-
-  document.getElementById(
-    "nextEvents"
-  ).textContent =
-    allEvents.filter(e=>{
-
-      const d =
-        new Date(e.date);
-
-      return(
-        !isNaN(d.getTime()) &&
-        d.getTime() > Date.now()
-      );
-
-    }).length;
+  updateCountdowns();
 
 }
 
 
-/* SECURITY */
+/* TIME */
 
-function escapeHTML(value){
+function getEventTimestamp(event) {
 
-  return String(value ?? "")
-    .replace(/&/g,"&amp;")
-    .replace(/</g,"&lt;")
-    .replace(/>/g,"&gt;")
-    .replace(/"/g,"&quot;")
-    .replace(/'/g,"&#039;");
+  const raw =
+    event.date ||
+    event.datetime ||
+    event.timestamp ||
+    event.time;
+
+  if (!raw) return "";
+
+  const parsed =
+    new Date(raw);
+
+  if (isNaN(parsed.getTime())) {
+    return "";
+  }
+
+  return parsed.toISOString();
+
+}
+
+
+function formatEventTime(event) {
+
+  const raw =
+    event.date ||
+    event.datetime ||
+    event.timestamp ||
+    event.time;
+
+  if (!raw) return "--";
+
+  const d = new Date(raw);
+
+  if (isNaN(d.getTime())) return "--";
+
+  return d.toLocaleTimeString(
+    "en-GB",
+    {
+      timeZone: "Asia/Baghdad",
+      hour: "2-digit",
+      minute: "2-digit"
+    }
+  );
+
+}
+
+
+/* COUNTDOWN */
+
+function updateCountdowns() {
+
+  document
+    .querySelectorAll(".countdown")
+    .forEach(el => {
+
+      const raw =
+        el.dataset.time;
+
+      if (!raw) {
+
+        el.textContent = "--";
+
+        return;
+
+      }
+
+      const target =
+        new Date(raw).getTime();
+
+      const now =
+        Date.now();
+
+      const diff =
+        target - now;
+
+      if (diff <= 0) {
+
+        el.textContent =
+          "لە ئێستادا / تەواو";
+
+        return;
+
+      }
+
+      const seconds =
+        Math.floor(diff / 1000);
+
+      const days =
+        Math.floor(seconds / 86400);
+
+      const hours =
+        Math.floor(
+          (seconds % 86400) / 3600
+        );
+
+      const minutes =
+        Math.floor(
+          (seconds % 3600) / 60
+        );
+
+      const secs =
+        seconds % 60;
+
+      if (days > 0) {
+
+        el.textContent =
+          `${days}d ${hours}h ${minutes}m`;
+
+      } else {
+
+        el.textContent =
+          `${String(hours).padStart(2,"0")}:` +
+          `${String(minutes).padStart(2,"0")}:` +
+          `${String(secs).padStart(2,"0")}`;
+
+      }
+
+    });
+
+}
+
+
+/* ESCAPE */
+
+function escapeHTML(value) {
+
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
 
 }
 
@@ -1407,65 +1094,96 @@ function escapeHTML(value){
 /* EVENTS */
 
 document
-  .getElementById("search")
-  .addEventListener(
-    "input",
-    renderEvents
-  );
+  .querySelectorAll("[data-period]")
+  .forEach(button => {
 
-document
-  .getElementById("impact")
-  .addEventListener(
-    "change",
-    renderEvents
-  );
+    button.addEventListener(
+      "click",
+      () => {
 
-document
-  .getElementById("currency")
-  .addEventListener(
-    "change",
-    renderEvents
-  );
+        document
+          .querySelectorAll("[data-period]")
+          .forEach(btn =>
+            btn.classList.remove("active")
+          );
 
-document
-  .getElementById("period")
-  .addEventListener(
-    "change",
-    renderEvents
-  );
+        button.classList.add("active");
 
-document
-  .getElementById("refreshBtn")
-  .addEventListener(
-    "click",
-    loadNews
-  );
+        state.period =
+          button.dataset.period;
+
+        loadCalendar();
+
+      }
+    );
+
+  });
 
 
-/* LIVE REFRESH */
+currencyFilter.addEventListener(
+  "change",
+  () => {
 
-loadNews();
+    state.currency =
+      currencyFilter.value;
 
-/*
-  هەر 60 چرکە جارێک
-  داتاکان نوێ دەکرێنەوە.
-*/
+    render();
 
-setInterval(
-  loadNews,
-  60000
+  }
 );
 
 
-/*
-  Countdown ـەکان
-  هەر 30 چرکە نوێ دەکرێنەوە.
-*/
+impactFilter.addEventListener(
+  "change",
+  () => {
+
+    state.impact =
+      impactFilter.value;
+
+    render();
+
+  }
+);
+
+
+searchInput.addEventListener(
+  "input",
+  () => {
+
+    state.search =
+      searchInput.value.trim();
+
+    render();
+
+  }
+);
+
+
+refreshBtn.addEventListener(
+  "click",
+  loadCalendar
+);
+
+
+/* AUTO REFRESH */
 
 setInterval(
-  renderEvents,
-  30000
+  loadCalendar,
+  5 * 60 * 1000
 );
+
+
+/* COUNTDOWN REFRESH */
+
+setInterval(
+  updateCountdowns,
+  1000
+);
+
+
+/* START */
+
+loadCalendar();
 
 </script>
 
