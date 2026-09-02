@@ -48,7 +48,6 @@ export default async function handler(req, res) {
   const GEMINI_API_KEY = process.env.GEMINI_API_KEY;
   const OPENROUTER_API_KEY = process.env.OPENROUTER_API_KEY;
   const TWELVE_DATA_API_KEY = process.env.TWELVE_DATA_API_KEY;
-  const FMP_API_KEY = process.env.FMP_API_KEY;
 
   // =========================================================
   // REQUEST DATA
@@ -261,31 +260,51 @@ export default async function handler(req, res) {
   }
 
   // =========================================================
-  // GET ECONOMIC NEWS
+  // GET ECONOMIC NEWS - XOOMAAR
   // =========================================================
   async function getNews() {
-    if (!FMP_API_KEY) {
-      return {
-        available: false,
-        reason: "FMP_API_KEY نەدۆزرایەوە.",
-        events: []
-      };
-    }
-
     try {
       const now = new Date();
 
       const year = now.getUTCFullYear();
-      const month = String(now.getUTCMonth() + 1).padStart(2, "0");
-      const day = String(now.getUTCDate()).padStart(2, "0");
+      const month = String(
+        now.getUTCMonth() + 1
+      ).padStart(2, "0");
+      const day = String(
+        now.getUTCDate()
+      ).padStart(2, "0");
 
-      const today = `${year}-${month}-${day}`;
+      const today =
+        `${year}-${month}-${day}`;
+
+      // هەفتەی داهاتووش دەگرین بۆ ئەوەی
+      // هەواڵە گرنگەکانی نزیک بەردەست بن
+      const futureDate = new Date(
+        now.getTime() +
+        7 * 24 * 60 * 60 * 1000
+      );
+
+      const futureYear =
+        futureDate.getUTCFullYear();
+
+      const futureMonth =
+        String(
+          futureDate.getUTCMonth() + 1
+        ).padStart(2, "0");
+
+      const futureDay =
+        String(
+          futureDate.getUTCDate()
+        ).padStart(2, "0");
+
+      const to =
+        `${futureYear}-${futureMonth}-${futureDay}`;
 
       const url =
-        "https://financialmodelingprep.com/stable/economic-calendar" +
-        `?from=${today}` +
-        `&to=${today}` +
-        `&apikey=${encodeURIComponent(FMP_API_KEY)}`;
+        "https://xoomar.com/api/markets/calendar" +
+        `?from=${encodeURIComponent(today)}` +
+        `&to=${encodeURIComponent(to)}` +
+        "&importance=high";
 
       const response = await fetchTimeout(
         url,
@@ -300,115 +319,138 @@ export default async function handler(req, res) {
       if (!response.ok) {
         return {
           available: false,
-          reason: `News API HTTP ${response.status}`,
+          reason:
+            `Xoomar News API HTTP ${response.status}`,
           events: []
         };
       }
 
       const data = await response.json();
 
-      if (!Array.isArray(data)) {
+      const rawEvents =
+        Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data)
+            ? data.data
+            : [];
+
+      if (!Array.isArray(rawEvents)) {
         return {
           available: false,
-          reason: "Economic Calendar داتای دروستی نەگەڕاندەوە.",
+          reason:
+            "Xoomar Economic Calendar داتای دروستی نەگەڕاندەوە.",
           events: []
         };
       }
 
-      const keywords = [
-        "CPI",
-        "NFP",
-        "FOMC",
-        "FED",
-        "PPI",
-        "GDP",
-        "interest rate",
-        "interest",
-        "nonfarm",
-        "inflation",
-        "unemployment",
-        "retail sales",
-        "ISM",
-        "jobs",
-        "employment"
-      ];
-
-      const events = data
-        .filter((item) => {
-          const country =
-            String(
-              item.country ||
-              item.countryName ||
-              ""
-            ).toLowerCase();
-
-          const eventName =
-            String(
-              item.event ||
-              item.name ||
-              item.title ||
-              ""
-            ).toLowerCase();
-
-          const impact =
-            String(
-              item.impact ||
-              item.importance ||
-              ""
-            ).toLowerCase();
-
-          const isUS =
-            country.includes("united states") ||
-            country === "us" ||
-            country === "usa";
-
-          const important =
-            impact.includes("high") ||
-            impact.includes("medium") ||
-            keywords.some((keyword) =>
-              eventName.includes(keyword.toLowerCase())
-            );
-
-          return isUS && important;
-        })
-        .slice(0, 40)
+      const events = rawEvents
         .map((item) => ({
-          date: item.date || item.datetime || null,
+          date:
+            item.scheduledAt ||
+            item.datetime ||
+            item.date ||
+            null,
+
           country:
             item.country ||
             item.countryName ||
             "United States",
+
           event:
+            item.eventName ||
             item.event ||
             item.name ||
             item.title ||
             "",
+
           impact:
-            item.impact ||
             item.importance ||
-            "",
+            item.impact ||
+            "high",
+
           actual:
             item.actual ?? null,
+
           estimate:
             item.estimate ??
             item.forecast ??
             null,
+
           previous:
-            item.previous ?? null
-        }));
+            item.previous ?? null,
+
+          period:
+            item.periodLabel ||
+            item.period ||
+            null
+        }))
+        .filter((item) => {
+          const country =
+            String(
+              item.country || ""
+            ).toLowerCase();
+
+          const eventName =
+            String(
+              item.event || ""
+            ).toLowerCase();
+
+          const isUS =
+            country.includes(
+              "united states"
+            ) ||
+            country === "us" ||
+            country === "usa";
+
+          // هەندێک جار Xoomar country ـەکە
+          // بە شێوەی جیاواز دەگەڕێنێتەوە.
+          const importantKeywords = [
+            "cpi",
+            "nfp",
+            "fomc",
+            "fed",
+            "ppi",
+            "gdp",
+            "interest rate",
+            "interest",
+            "nonfarm",
+            "inflation",
+            "unemployment",
+            "retail sales",
+            "ism",
+            "employment",
+            "jobs",
+            "payroll"
+          ];
+
+          const isImportantEvent =
+            importantKeywords.some(
+              (keyword) =>
+                eventName.includes(keyword)
+            );
+
+          return isUS || isImportantEvent;
+        })
+        .slice(0, 50);
 
       return {
         available: true,
         date: today,
+        from: today,
+        to,
+        source: "Xoomar",
+        provider: "Xoomar Pulse",
         events
       };
+
     } catch (error) {
       return {
         available: false,
         reason:
           error?.name === "AbortError"
-            ? "News API timeout"
-            : error?.message || "News API error",
+            ? "Xoomar News API timeout"
+            : error?.message ||
+              "Xoomar News API error",
         events: []
       };
     }
